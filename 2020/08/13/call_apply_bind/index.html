@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  
+    <link rel="icon" href="/img/favicon.ico">
+  
+  
+      <meta name="author" content="yulin chen">
+  
+  
+  
+      <meta name="description" content="陈玉林的个人博客，个人提升学习记录点">
+  
+  
+      <meta name="keywords" content=",YuLin_Blog，javascript，vue">
+  
+  
+    <link rel="alternate" href="/atom.xml " title="YuLin_Blog" type="application/atom+xml">
+  
+
+  
+
+  <title>apply call bind区别及实现 | YuLin_Blog</title>
+
+  
+
+  
+
+  
+
+
+  
+
+  
+    
+      <link rel="stylesheet" href="/css/style.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.1.2/styles/a11y-dark.css">
+    
+
+<meta name="generator" content="Hexo 5.0.2"></head>
+</html>
+    
+<header class="header">
+    <div class="title animated fadeInDown">
+        
+            <div class="logo">
+                
+                    <a href="/"><img data-src="https://cdn.jsdelivr.net/gh/a2396837/CDN@latest/images/2020/07/27/baokemeng.webp" onerror=this.onerror=null,this.src="/img/loading.gif"></a>
+                    
+            </div>
+         
+    </div>
+    <div class="navbar animated fadeInDown">
+     
+    
+            <div class="social">
+                
+            </div>
+     
+   </div>
+</header>
+
+
+
+    
+<div class="nav index" style="height: 60px;">
+    <div class="title animated fadeInDown">
+        <div class="layui-container">
+            
+                <div class="nav-title"><a href="/" title="YuLin_Blog">YuLin_Blog</a></div>
+               
+            <div class="nav-list">
+                <button> <span class=""></span><span style="display: block;"></span><span class=""></span> </button>
+                <ul class="layui-nav" lay-filter="">
+                    
+                    <li class="layui-nav-item">
+                        <a href="/">
+                            <i class="fab fa-fort-awesome"></i>
+                            <span class="layui-nav-item-name">首页</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/archives/">
+                            <i class="fas fa-archive"></i>
+                            <span class="layui-nav-item-name">归档</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/tags/">
+                            <i class="fas fa-hashtag"></i>
+                            <span class="layui-nav-item-name">标签</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/categories/">
+                            <i class="far fa-folder-open"></i>
+                            <span class="layui-nav-item-name">分类</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/about/">
+                            <i class="fab fa-grav"></i>
+                            <span class="layui-nav-item-name">关于</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/guestbook/">
+                            <i class="fab fa-telegram"></i>
+                            <span class="layui-nav-item-name">留言</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/link/">
+                            <i class="fab fa-weixin"></i>
+                            <span class="layui-nav-item-name">友链</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        <a href="/shuoshuo/">
+                            <i class="fas fa-coffee"></i>
+                            <span class="layui-nav-item-name">说说</span>
+                        </a>
+                    </li>
+                    
+                    <li class="layui-nav-item">
+                        
+                        <div id="dark" onclick="switchDarkMode()"></div>
+                        <script>
+                            if (localStorage.getItem('dark') === '1') {
+                                document.body.classList.add('dark');
+                            }
+                            document.getElementById('dark').innerHTML = document.querySelector("body").classList.contains("dark") ? "🌙" : "🌞";
+                        </script>
+                        
+                    </li>
+                    <span class="layui-nav-bar" style="left: 342px; top: 78px; width: 0px; opacity: 0;"></span>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+<article id="post">
+  <div class="post-title">apply call bind区别及实现</div>
+  
+<div class="post-meta">
+    
+    
+      <div class="post-meta-item date">
+        <span title="发表于 2020.08.13"><i class="far fa-calendar-alt"></i> 2020.08.13</span>
+      </div>
+      <div class="post-meta-item updated">
+        <span title="更新于 2020.08.13"><i class="far fa-calendar-check"></i> 2020.08.13</span>
+      </div>
+     
+    
+      <div class="post-meta-item categories">
+        
+          <i class="fas fa-inbox article-meta__icon"></i> <a href="/categories/javaScript/">javaScript</a>
+        
+      </div>
+     
+    
+     <div class="post-meta-item wordcount">
+        
+          <i class="fas fa-pencil-alt"></i> <span class="post-count">620 字</span>
+           
+        
+          <i class="far fa-clock"></i> <span class="post-count">2 分钟</span>
+                               
+      </div>
+     
+</div>
+
+
+  
+  <div class="content">
+        <div><p>首先我们需要了解这三个函数存在的意义是什么？答案是改变函数执行时的上下文，再具体一点就是改变函数运行时的this指向。</p>
+<p>举个栗子</p>
+<pre><code class="hljs javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Person</span>(<span class="hljs-params">name</span>)</span>&#123;
+  <span class="hljs-built_in">this</span>.name = name;
+&#125;
+Person.prototype = &#123;
+  <span class="hljs-keyword">constructor</span>: Person,
+  showName: function()&#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">this</span>.name);
+  &#125;
+&#125;
+<span class="hljs-keyword">var</span> person = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">&#x27;qianlong&#x27;</span>);
+person.showName();</code></pre>
+
+<p> 上面的代码中person调用showName方法后会在浏览器的控制台输出<code>qianlong</code> </p>
+<p><strong>接下来</strong></p>
+<pre><code class="hljs actionscript"><span class="hljs-keyword">var</span> animal = &#123;
+  name: <span class="hljs-string">&#x27;cat&#x27;</span>
+&#125;</code></pre>
+
+<p> 上面代码中有一个对象字面量，他没有所谓的showName方法，但是我还是想用？怎么办？(坑爹了，这好像在让巧媳妇去做无米之炊)，不过没关系，call、apply、bind可以帮我们干这件事。 </p>
+<pre><code class="hljs less"><span class="hljs-comment">// 1 call</span>
+<span class="hljs-selector-tag">person</span><span class="hljs-selector-class">.showName</span><span class="hljs-selector-class">.call</span>(animal);
+<span class="hljs-comment">// 2 apply</span>
+<span class="hljs-selector-tag">person</span><span class="hljs-selector-class">.showName</span><span class="hljs-selector-class">.apply</span>(animal);
+<span class="hljs-comment">// 3 bind</span>
+<span class="hljs-selector-tag">person</span><span class="hljs-selector-class">.showName</span><span class="hljs-selector-class">.bind</span>(animal)();</code></pre>
+
+<p><strong>啦啦啦，有木有很神奇，控制台输出了三次<code>cat</code></strong></p>
+<p>我们拿别人的showName方法，并动态改变其<strong>上下文</strong>帮自己输出了信息，说到底就是实现了<strong>复用</strong></p>
+<p><strong>区别</strong></p>
+<blockquote>
+<p>上面看起来三个函数的作用差不多，干的事几乎是一样的，那为什么要存在3个家伙呢，留一个不就可以。所以其实他们干的事从本质上讲都是一样的动态的改变this上下文，但是多少还是有一些差别的…</p>
+</blockquote>
+<p>call，apply与bind的差别</p>
+<blockquote>
+<p>call和apply改变了函数的this上下文后便执行该函数，而bind则是返回改变了上下文后的一个函数</p>
+</blockquote>
+<p>call和apply的区别</p>
+<blockquote>
+<p> 他们俩之间的差别在于参数的区别，call和aplly的第一个参数都是要改变上下文的对象，而call从第二个参数开始以参数列表的形式展现，apply则是把除了改变上下文对象的参数放在一个数组里面作为它的第二个参数。 </p>
+<pre><code class="hljs apache"><span class="hljs-attribute">fn</span>.call(obj, arg<span class="hljs-number">1</span>, arg<span class="hljs-number">2</span>, arg<span class="hljs-number">3</span>...);
+<span class="hljs-attribute">fn</span>.apply(obj,<span class="hljs-meta"> [arg1, arg2, arg3...]);</span></code></pre>
+</blockquote>
+<p><strong>call原理</strong></p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">Function</span>.prototype.MyCall = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>&#123;
+  context = context ? <span class="hljs-built_in">Object</span>(context) : <span class="hljs-built_in">window</span>
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">this</span>) 
+  context.fn = <span class="hljs-built_in">this</span> 
+  <span class="hljs-keyword">let</span> args = [...arguments].slice(<span class="hljs-number">1</span>)
+  <span class="hljs-keyword">let</span> r = context.fn(args)
+  <span class="hljs-keyword">delete</span> context.fn
+  <span class="hljs-keyword">return</span> r
+&#125;</code></pre>
+
+<p><strong>apply原理</strong></p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">Function</span>.prototype.myApply = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>&#123;
+  context = context ? <span class="hljs-built_in">Object</span>(context) : <span class="hljs-built_in">window</span>
+    context.fn = <span class="hljs-built_in">this</span>
+    <span class="hljs-keyword">let</span> args = [...arguments][<span class="hljs-number">1</span>]
+    <span class="hljs-keyword">if</span> (!args) &#123;
+      <span class="hljs-keyword">return</span> context.fn()
+    &#125;
+    <span class="hljs-keyword">let</span> r = context.fn(args)
+    <span class="hljs-keyword">delete</span> context.fn;
+    <span class="hljs-keyword">return</span> r
+ &#125;
+</code></pre>
+
+<p><strong>bind原理</strong></p>
+<pre><code class="hljs javascript"><span class="hljs-built_in">Function</span>.prototype.bind = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">context</span>) </span>&#123;
+  <span class="hljs-keyword">let</span> _me = <span class="hljs-built_in">this</span>
+  <span class="hljs-keyword">let</span> bindArgs = [].slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>)
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Fn</span>(<span class="hljs-params"></span>) </span>&#123;&#125;
+  <span class="hljs-keyword">let</span> fBound = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;
+    <span class="hljs-keyword">let</span> fnArgs = [].slice.call(<span class="hljs-built_in">arguments</span>)
+    <span class="hljs-keyword">return</span> _me.apply(<span class="hljs-built_in">this</span> <span class="hljs-keyword">instanceof</span> fBound ? <span class="hljs-built_in">this</span> : context, bindArgs.concat(fnArgs))
+  &#125;
+  Fn.prototype = <span class="hljs-built_in">this</span>.prototype
+  fBound.prototype = <span class="hljs-keyword">new</span> Fn();
+  <span class="hljs-keyword">return</span> fBound
+&#125;</code></pre></div>
+        
+          <div class="post-copyright">
+                  <div class="copyright-item">
+                      <span> 作者: yulin chen</span>
+                  </div>
+                  <div class="copyright-item">
+                      <span> 链接: <a href="http://yoursite.com/2020/08/13/call_apply_bind/">http://yoursite.com/2020/08/13/call_apply_bind/</a></span>
+                  </div>
+                  <div class="copyright-item">
+                      <span> 声明: 本博客所有文章除特别声明外，均采用许可协议 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> 转载请注明出处！</span>
+                  </div>
+          </div>
+        
+  </div>
+
+  <div class="share-reward">
+    <div class="share">
+        
+<div class="social-share" data-sites="facebook,twitter,wechat,weibo,qq"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css">
+<script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script>
+
+
+      </div>
+        <div class="reward">
+          
+  <div style="padding: 10px 0; margin-left: 20px; width: 90%; text-align: center;">
+    <div class="reward-content">
+        <ul id="donateBox" class="list pos-a">
+          
+           <li id="PayPal"><a href="https://paypal.me" target="_blank" title="贝宝">贝宝</a></li>
+            
+          
+            <li id="AliPay" title="支付宝"><img data-img="/img/alipay.jpg" onerror=this.onerror=null,this.src="/img/loading.gif"></img></li>
+               
+                 
+            <li id="WeChat" title="微信"><img date-img="/img/wechat.jpg" onerror=this.onerror=null,this.src="/img/loading.gif"></img></li>
+                      
+          </ul>
+        <div id="QRBox" class="pos-f left-100">
+          <div id="MainBox"></div>
+        </div>
+    </div>
+  </div>
+  
+        </div>
+    </div>
+    
+    <div class="post_tags">
+      
+        <i class="fas fa-tag"></i> <a href="/tags/javaScript/" class="tag">javaScript</a>
+      
+    </div>
+    <div class="post-nav">
+      
+      
+    </div>
+
+
+    <div class="comments">
+      
+    </div>
+</article>
+
+    
+<a id="gotop" href="javascript:" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+<script>
+    window.onscroll = function() {scrollFunction()};
+    function scrollFunction() {console.log(121);
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.getElementById("gotop").style.display = "block";
+        } else {
+            document.getElementById("gotop").style.display = "none";
+        }
+    }
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+    
+
+
+
+
+
+
+    
+<div id="bottom-outer">
+    <div id="bottom-inner">
+        © 2020 <i class="fa fa-heart" id="heart"></i> yulin chen 
+        <br>
+        Powered by 
+        <a target="_blank" rel="noopener" href="http://hexo.io">hexo</a> | Theme is <a target="_blank" rel="noopener" href="https://github.com/a2396837/hexo-theme-blank/">blank</a>
+        
+          <div class="icp-info">
+            
+          <a href="" target="_blank"> </a>
+        </div>
+        
+    </div>  
+  </div>
+
+
+<script src="https://www.layuicdn.com/layui-v2.5.6/layui.js"></script>
+
+
+  
+    <script src="/js/script.js"></script>
+  
+    <script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script>
+  
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.3/build/highlight.min.js"></script>
+  
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js"></script>
+  
+
+
+
+  <script>
+      window.lazyLoadOptions = {
+        elements_selector: 'img',
+        threshold: 0
+      }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script>
+
+
+
+  <script>
+    var images = $('img').not('.nav-logo img').not('.card img').not($('a>img')).not('.reward-content img')
+    images.each(function (i, o) {
+      var lazyloadSrc = $(o).attr('data-src') ? $(o).attr('data-src') : $(o).attr('src')
+      $(o).wrap(`<a href="${lazyloadSrc}" data-fancybox="group" data-caption="${$(o).attr('alt')}" class="fancybox"></a>`)
+    })
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script>
+  <script>
+        $().fancybox({
+      selector: '[data-fancybox]',
+      loop: true,
+      transitionEffect: 'slide',
+      protect: true,
+      buttons: ['slideShow', 'fullScreen', 'thumbs', 'close']
+    })
+  </script>
+  
+
+
+
+<script>
+  var btntop = $('#gotop');
+  btntop.on('click', function (e) {
+    e.preventDefault();
+    $('html, body').animate({ scrollTop: 0 }, '300');
+  });
+</script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.6.3/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({startOnLoad:true});</script>
+  <script>
+    $(document).ready(function () {
+      $('code.hljs').each(function (i, block) {
+        if ($.inArray(block.className, ['mermaid']) < 0) {
+          hljs.lineNumbersBlock(block);
+        }
+      });
+    });
+    </script>
+  
+
+
+
+<script>
+//reward
+jQuery(document).ready(function () {
+  var QRBox = $('#QRBox');
+  var MainBox = $('#MainBox');
+  var AliPayQR = '/img/alipay.jpg';
+  var WeChanQR = '/img/wechat.jpg';
+
+  function showQR(QR) {
+    if (QR) {
+      MainBox.css('background-image', 'url(' + QR + ')');
+    }
+    $('#donateBox').addClass('blur');
+    QRBox.fadeIn(300, function (argument) {
+      MainBox.addClass('showQR');
+    });
+  }
+
+  $('#donateBox>li').click(function (event) {
+    var thisID = $(this).attr('id');
+    if (thisID === 'AliPay') {
+      showQR(AliPayQR);
+    } else if (thisID === 'WeChat') {
+      showQR(WeChanQR);
+    }
+  });
+
+  MainBox.click(function (event) {
+    MainBox.removeClass('showQR').addClass('hideQR');
+    setTimeout(function (a) {
+      QRBox.fadeOut(300, function (argument) {
+        MainBox.removeClass('hideQR');
+      });
+      $('#DonateText,#donateBox,#github').removeClass('blur');
+    }, 600);
+
+  });
+});
+</script>
+
+
+<script>
+  var $table = $('.content table').not($('figure.highlight > table'))
+  $table.each(function () {
+    $(this).wrap('<div class="table-wrap"></div>')
+  })
+</script>
+
+
+
+
+
+</html>
